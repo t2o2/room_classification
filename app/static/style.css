@@ -27,7 +27,12 @@ body {
 }
 
 .analyze {
+    margin-top: 2em;
+}
+
+#thumb {
     margin-top: 5em;
+    max-width: 50em;
 }
 
 .upload-label {
