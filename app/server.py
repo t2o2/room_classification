@@ -49,7 +49,7 @@ def index(request):
 @app.route('/analyze', methods=['POST'])
 async def analyze(request):
     data = await request.form()
-    img_bytes = await (data['file'].read())
+    img_bytes = await (data['filepond'].read())
     img = open_image(BytesIO(img_bytes))
     rsp = {'result': str(learn.predict(img)[0])}
     print(rsp, flush=True)

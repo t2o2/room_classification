@@ -2,22 +2,18 @@
 <html>
   <head>
     <meta charset='utf-8'>
-    <title>Hello World</title>
+    <title>Room Classifier</title>
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
 
     <!-- Add plugin styles -->
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
     <link rel='stylesheet' href='../static/style.css'>
-    <script src='../static/client.js'></script>
   </head>
   <body>
     <div>
       <div class='center'>
         <div class='title'>Room Type Classifier</div>
-        <input class='center' id='thumb' type="file">
-        <div class='analyze'>
-          <button id='analyze-button' class='analyze-button' type='button' onclick='analyze()'>Analyze</button>
-        </div>
+        <input class='center' id='thumb' type="file" data-max-file-size="3MB">
         <div class='result-label'>
             <label id='result-label'></label>
         </div>
@@ -25,15 +21,37 @@
     </div>
 
     <!-- Add plugin scripts -->
-    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js"></script>
 
-    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
     <script>
+        var el = x => document.getElementById(x);
+        el('result-label').innerHTML = '';
+        el('result-label').show = false;
         FilePond.registerPlugin(
-            FilePondPluginImagePreview
+          FilePondPluginImagePreview,
+          FilePondPluginImageExifOrientation,
+          FilePondPluginFileValidateSize
         );
-        const inputElement = document.querySelector('input[type="file"]');
-        const pond = FilePond.create(inputElement);
+        FilePond.setOptions({
+          server: {
+            process: {
+              url: './analyze',
+              method: 'POST',
+              onload: (rsp) => {
+                  var response = JSON.parse(rsp);
+                  el('result-label').innerHTML = `Result = ${response['result']}`;
+                  el('result-label').show = true;
+              }
+            }
+          }
+        })
+        pond = FilePond.create(document.querySelector('input'))
+        pond.on('removefile', (error, file) => {
+          el('result-label').innerHTML = '';
+        });
     </script>
   </body>
 </html>
