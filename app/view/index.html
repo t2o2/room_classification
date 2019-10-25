@@ -4,18 +4,39 @@
     <meta charset='utf-8'>
     <title>Room Classifier</title>
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
-
-    <!-- Add plugin styles -->
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel='stylesheet' href='../static/style.css'>
   </head>
   <body>
     <div>
-      <div class='center'>
-        <div class='title'>Room Type Classifier</div>
-        <input class='center' id='thumb' type="file" data-max-file-size="3MB">
-        <div class='result-label'>
-            <label id='result-label'></label>
+      <div class='center container-fluid'>
+        <div class='row'>
+          <div class="col-md">
+            <div class='title'><h1>Room Type Classifier</h1></div>
+          </div>
+        </div>
+        <div class='row'>
+          <div class="col-md">
+            <div>This tool allows you classify the type of room is in the picture. Simply drag and drop an image and have fun!</div>
+          </div>
+        </div>
+        <div class='row'>
+          <div class="col-md">
+            <input class='center' id='thumb' type="file" data-max-file-size="3MB">
+          </div>
+        </div>
+        <div class='row'>
+          <div class="col-md">
+            <div class='result-label'>
+              <h3><label id='result-label'></label></h3>
+            </div>
+          </div>
+        </div>
+        <div class='row'>
+          <div class="col-md">
+          <div><img src='/static/GitHub-Mark-32px.png'></img64> <a href='https://github.com/t2o2/room_classification'>t2o2/room_classification</a></div>
+          </div>
         </div>
       </div>
     </div>
@@ -24,6 +45,7 @@
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
     <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.min.js"></script>
 
     <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
     <script>
@@ -48,7 +70,10 @@
             }
           }
         })
-        pond = FilePond.create(document.querySelector('input'))
+        pond = FilePond.create(document.querySelector('input'),
+        {
+          imageResizeTargetWidth: 400
+        })
         pond.on('removefile', (error, file) => {
           el('result-label').innerHTML = '';
         });
